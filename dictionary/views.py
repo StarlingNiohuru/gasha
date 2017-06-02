@@ -1,21 +1,17 @@
-from flask import Flask, flash, request, render_template, url_for, abort
-from flask_bootstrap import Bootstrap
+from flask import flash, request, render_template, url_for, app
 from flask_login import login_user, login_required, logout_user
 from werkzeug.utils import redirect
 
 from forms import LoginForm
 from models import User
 
-app = Flask(__name__)
-Bootstrap(app)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    user_id = form.id.data
+    username = form.username.data
     if form.validate_on_submit():
-        user = User.get_id(user_id)
+        user = User.get_id(username)
         login_user(user)
 
         flash('Logged in successfully.')
@@ -33,7 +29,3 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
