@@ -1,7 +1,6 @@
+from app import db, login_manager
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash
-
-from dictionary import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class Role(db.Model):
@@ -21,12 +20,6 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
-    def __init__(self, id, username, password, active=True):
-        self.id = id
-        self.username = username
-        self.password = password
-        self.active = active
-
     def is_active(self):
         # Here you should write whatever the code is
         # that checks the database if your user is active
@@ -45,3 +38,11 @@ class User(db.Model, UserMixin):
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
