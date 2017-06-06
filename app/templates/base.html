@@ -13,9 +13,9 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="#">Gasha Project</a>
             {% if current_user.is_authenticated %}
-            <b class="navbar-text">Hello, {{ current_user.username }}</b>
+            <p class="navbar-text">Hello, {{ current_user.username }}</p>
             {% else %}
-            <b class="navbar-text">an editable dict app for endangered languages</b>
+            <p class="navbar-text">an editable dict app for endangered languages</p>
             {% endif %}
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
