@@ -6,11 +6,8 @@
 {% block content %}
 <div class="col-sm-3 col-md-2 sidebar">
     <ul class="nav nav-sidebar">
-        <li {% if request.endpoint== item.endpoint %} class='active' {% endif %}><a href="#">Introduction<span
-                class="sr-only">(current)</span></a></li>
-        {% block self_self %}
-        <li><a href="{{ url_for('main.self_self') }}">{{main_language}} - {{main_language}}</a></li>
-        {% endblock self_self %}
+        <li class='active'><a href="#">Introduction<span class="sr-only">(current)</span></a></li>
+        <li><a href="{{ url_for('main.dictionary') }}">Dictionary</a></li>
     </ul>
     <ul class="nav nav-sidebar">
         <li><a href="">Others</a></li>
