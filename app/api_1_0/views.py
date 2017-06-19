@@ -4,7 +4,7 @@ from app.api_1_0 import api
 from app.main.models import Entry
 
 
-@api.route('/dictionary/')
+@api.route('/dictionary')
 def get_dictionary():
     dictionary = Entry.objects.all()
     return jsonify(dictionary.to_json())
