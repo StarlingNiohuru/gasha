@@ -1,6 +1,6 @@
 from datetime import datetime
 from app import db_mongo
-from config import DEFINITION_TYPE_CHOICE, ENTRY_TYPE_CHOICE
+from config import DEFINITION_TYPE_CHOICE, ENTRY_TYPE_CHOICE, MAIN_LANGUAGE
 
 
 class Remark(db_mongo.EmbeddedDocument):
@@ -53,7 +53,7 @@ class Entry(db_mongo.Document):
     last_modified = db_mongo.DateTimeField()
     last_editor = db_mongo.StringField(default='admin')
     entry_name = db_mongo.StringField(unique=True, required=True)
-    entry_type = db_mongo.IntField(choices=ENTRY_TYPE_CHOICE)
+    entry_type = db_mongo.IntField(choices=ENTRY_TYPE_CHOICE, default=MAIN_LANGUAGE)
     pronunciation = db_mongo.StringField()
     related_entries = db_mongo.ListField(db_mongo.StringField(), default=[])
     remark = db_mongo.EmbeddedDocumentField(Remark)

@@ -54,4 +54,4 @@ DEFINITION_TYPE_CHOICE = (
     (0, 'normal'),
 )
 
-MAIN_LANGUAGE = 'my_language'
+MAIN_LANGUAGE = 'Manchu'

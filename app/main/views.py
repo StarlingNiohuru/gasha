@@ -1,7 +1,9 @@
-from flask import render_template, url_for
+from flask import render_template, url_for, request
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 
+from app.main.forms import ShowEntriesForm
+from app.main.models import Entry
 from config import MAIN_LANGUAGE
 from . import main
 
@@ -15,7 +17,11 @@ def index():
         return redirect(url_for('auth.login'))
 
 
-@main.route('/dictionary')
+@main.route('/dictionary', methods=['GET', 'POST'])
 @login_required
 def dictionary():
-    return render_template('dictionary.html', main_language=MAIN_LANGUAGE)
+    form = ShowEntriesForm()
+    query = Entry.objects.filter(last_modified__gte=form.last_modified_from.data,
+                                 last_modified__lte=form.last_modified_to.data,
+                                 entry_type=form.entry_type.data)
+    return render_template('dictionary.html', form=form, query=query)
