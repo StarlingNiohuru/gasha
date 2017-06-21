@@ -4,7 +4,7 @@
 {{ super() }}
 {% endblock navbar %}
 {% block content %}
-<div class="col-sm-3 col-md-2 sidebar">
+<div class="col-sm-3 col-md-1 sidebar">
     <ul class="nav nav-sidebar">
         <li class='active'><a href="#">Introduction<span class="sr-only">(current)</span></a></li>
         <li><a href="{{ url_for('main.dictionary') }}">Dictionary</a></li>
@@ -13,7 +13,7 @@
         <li><a href="">Others</a></li>
     </ul>
 </div>
-<div class="col-md-offset-3 main">
+<div class="col-md-offset-1 main">
     <br>
     <h1>Introduction</h1>
     <p class="lead">Gasha is an editable dict app project for endangered languages.

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
+        <div class="col-sm-3 col-md-1 sidebar">
             <ul class="nav nav-sidebar">
                 <li><a href="{{ url_for('main.index') }}">Introduction</a></li>
                 <li class='active'><a href="#">Dictionary<span class="sr-only">(current)</span></a></li>
@@ -12,12 +12,19 @@
                 <li><a href="">Others</a></li>
             </ul>
         </div>
-        <div class="col-md-offset-3 main">
+        <div class="col-md-offset-1 main">
             <h1 class="page-header">Dictionary Dashboard</h1>
             <div class="row">
-                <div class="col-md-2" id="show-entries-form">
-                    {{ wtf.quick_form(form) }}
-                    <br>
+                <div class="col-md-10" id="show-entries-form">
+                    <form class="form form-inline" method="post" role="form">
+                        {{ form.hidden_tag() }}
+                        {{ wtf.form_errors(form, hiddens="only") }}
+                        {{ wtf.form_field(form.last_modified_from) }}
+                        {{ wtf.form_field(form.last_modified_to) }}
+                        {{ wtf.form_field(form.entry_type) }}
+                        {{ wtf.form_field(form.submit,class="btn btn-primary") }}
+                        <br>
+                    </form>
                 </div>
                 <button type="button" class="btn btn-primary">add a new entry</button>
             </div>
