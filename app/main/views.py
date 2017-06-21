@@ -1,10 +1,10 @@
-from flask import render_template, url_for, request
+from flask import render_template, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 
 from app.main.forms import ShowEntriesForm
 from app.main.models import Entry
-from config import MAIN_LANGUAGE
+from config import ENTRY_TYPE_CHOICE
 from . import main
 
 
@@ -21,7 +21,9 @@ def index():
 @login_required
 def dictionary():
     form = ShowEntriesForm()
+    entry_type_list = [int(x[0]) for x in ENTRY_TYPE_CHOICE] if form.entry_type.data == '-2' else [
+        int(form.entry_type.data)]
     query = Entry.objects.filter(last_modified__gte=form.last_modified_from.data,
                                  last_modified__lte=form.last_modified_to.data,
-                                 entry_type=form.entry_type.data)
-    return render_template('dictionary.html', form=form, query=query)
+                                 entry_type__in=entry_type_list)
+    return render_template('dictionary.html', form=form, query=query, entry_type_dict=dict(ENTRY_TYPE_CHOICE))
