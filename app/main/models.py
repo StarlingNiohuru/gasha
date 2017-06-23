@@ -52,6 +52,7 @@ class Entry(db_mongo.Document):
     created_time = db_mongo.DateTimeField(default=datetime.now())
     last_modified = db_mongo.DateTimeField()
     last_editor = db_mongo.StringField(default='admin')
+    is_commit_online = db_mongo.BooleanField(default=False)
     entry_name = db_mongo.StringField(unique=True, required=True)
     entry_type = db_mongo.IntField(choices=ENTRY_TYPE_CHOICE, default=0)
     pronunciation = db_mongo.StringField()

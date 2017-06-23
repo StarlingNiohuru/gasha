@@ -1,6 +1,5 @@
-from flask import render_template, url_for, flash
+from flask import render_template, url_for, jsonify, request
 from flask_login import login_required, current_user
-from mongoengine import DoesNotExist
 from werkzeug.utils import redirect
 
 from app.main.forms import ShowEntriesForm, EditEntryForm
@@ -27,20 +26,14 @@ def dictionary():
     query = Entry.objects.filter(last_modified__gte=form.last_modified_from.data,
                                  last_modified__lte=form.last_modified_to.data,
                                  entry_type__in=entry_type_list)
-    return render_template('dictionary.html', form=form, query=query, entry_type_dict=dict(ENTRY_TYPE_CHOICE))
+    edit_entry_form = EditEntryForm()
+    return render_template('dictionary.html', form=form, query=query, entry_type_dict=dict(ENTRY_TYPE_CHOICE),
+                           edit_entry_form=edit_entry_form)
 
 
-@main.route('/edit/<entry_name>')
+@main.route('/edit', methods=['POST'])
 @login_required
-def edit_entry(entry_name):
-    try:
-        entry = Entry.objects.get(entry_name=entry_name)
-    except DoesNotExist:
-        flash('The entry %s is not exist, back to dashboard.' % entry_name)
-        return redirect(url_for('.dictionary'))
-    else:
-        form = EditEntryForm()
-        form.entry_name.data = entry.entry_name
-        form.entry_type.data = entry.entry_type
-        form.pronunciation.data = entry.pronunciation
-        return render_template('entry.html', form=form)
+def edit_entry():
+    entry_name = request.get_json()['entry_name']
+    entry = Entry.objects.get(entry_name=entry_name)
+    return jsonify(entry.to_json())

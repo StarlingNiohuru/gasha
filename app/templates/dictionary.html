@@ -1,5 +1,33 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("button.edit-entry").click(function(){
+            if (this.id == 'new')
+                {$("h2.modal-title").text("Create a new entry");
+            $("input#entry_name").val("");
+            $("select#entry_type").val("");
+            $("input#pronunciation").val("");}
+            else
+                {var entryName = this.value;
+                    $.ajax({type: "POST",
+                        url:"{{ url_for('main.edit_entry') }}",
+                        data:JSON.stringify({entry_name:entryName}),
+                        dataType: "json",
+                        contentType:"application/json; charset=utf-8",
+                        success:function(data){
+                            var json = JSON.parse(data);
+                            $("input#entry_name").val(json.entry_name);
+                            $("select#entry_type").val(json.entry_type);
+                            $("input#pronunciation").val(json.pronunciation);}
+                        });
+                }
+            });
+    });
+</script>
+{% endblock scripts %}
 {% block content %}
 <div class="container-fluid">
     <div class="row">
@@ -26,16 +54,16 @@
                         <br>
                     </form>
                 </div>
-                <button type="button" data-toggle="modal" data-target="#edit-modal" class="btn btn-primary">add a new
-                    entry
-                </button>
-            </div>
-            <br>
-            <div class="row">
-                <h2 class="sub-header">Query results:</h2>
-                <div class="table-responsive" id="entries-table">
-                    <table class="table table-striped">
-                        <thead>
+                <button id="new" type="button" class="btn btn-primary edit-entry" data-toggle="modal"
+                data-target="#edit-modal">add a new entry
+            </button>
+        </div>
+        <br>
+        <div class="row">
+            <h2 class="sub-header">Query results:</h2>
+            <div class="table-responsive" id="entries-table">
+                <table class="table table-striped">
+                    <thead>
                         <tr>
                             <th>entry name</th>
                             <th>entry_type</th>
@@ -44,22 +72,26 @@
                             <th>last_modified</th>
                             <th>last_editor</th>
                             <th>edit</th>
-                        <tr>
-                        </thead>
-                        <tbody>
-                        {% for entry in query %}
-                        <tr>
-                            <td>{{ entry.entry_name }}</td>
-                            <td>{{ entry_type_dict[entry.entry_type] }}</td>
-                            <td>{{ entry.pronunciation }}</td>
-                            <td>{{ entry.definition|length }}</td>
-                            <td>{{ entry.last_modified }}</td>
-                            <td>{{ entry.last_editor }}</td>
-                            <td>
-                                <button type="button" class="btn btn-primary">Edit</button>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                            <tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in query %}
+                                <tr>
+                                    <td>{{ entry.entry_name }}</td>
+                                    <td>{{ entry_type_dict[entry.entry_type] }}</td>
+                                    <td>{{ entry.pronunciation }}</td>
+                                    <td>{{ entry.definition|length }}</td>
+                                    <td>{{ entry.last_modified }}</td>
+                                    <td>{{ entry.last_editor }}</td>
+                                    <td>
+                                        <button id="edit" value="{{entry.entry_name}}" type="button"
+                                        class="btn btn-primary edit-entry"
+                                        data-toggle="modal"
+                                        data-target="#edit-modal">Edit
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -78,7 +110,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                {{wtf.quick_form(form)}}
+                <div class="col-md-10" >
+                    <form id="edit-entry-form" class="form" method="post" role="form">
+                        {{ edit_entry_form.hidden_tag() }}
+                        {{ wtf.form_errors(edit_entry_form, hiddens="only") }}
+                        {{ wtf.form_field(edit_entry_form.entry_name) }}
+                        {{ wtf.form_field(edit_entry_form.entry_type) }}
+                        {{ wtf.form_field(edit_entry_form.pronunciation) }}
+                        <br>
+                    </form>
+                </div>
                 <button type="button" onclick="addDef" class="btn btn-primary">Add a definition</button>
             </div>
             <div class="modal-footer">
@@ -88,9 +129,4 @@
         </div>
     </div>
 </div>
-<script>
-function addDef() {
-    document.getElementById("demo").innerHTML = "Hello World";
-}
-</script>
 {% endblock content %}
