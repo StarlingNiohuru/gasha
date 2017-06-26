@@ -7,7 +7,7 @@
         $("button.edit-entry").click(function(){
             if (this.id == 'new')
                 {$("h2.modal-title").text("Create a new entry");
-            $("input#entry_name").val("");
+            $("input#entry_name").val("").removeAttr('readonly','readonly');
             $("select#entry_type").val("");
             $("input#pronunciation").val("");}
             else
@@ -19,12 +19,18 @@
                         contentType:"application/json; charset=utf-8",
                         success:function(data){
                             var json = JSON.parse(data);
-                            $("input#entry_name").val(json.entry_name);
+                            $("input#entry_name").val(json.entry_name).attr('readonly','readonly');
                             $("select#entry_type").val(json.entry_type);
                             $("input#pronunciation").val(json.pronunciation);}
                         });
                 }
             });
+        $('button.edit-def').click(function(){
+            var container = document.getElementById("modal-form-container");
+            var form = document.createElement('form');form.setAttribute('class','form');form.method="post";form.setAttribute('role','form');
+            container.append(form);
+            form.insertAdjacentHTML( 'test', str );
+        });
     });
 </script>
 {% endblock scripts %}
@@ -110,7 +116,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="col-md-10" >
+                <div id="modal-form-container" class="col-md-10" >
                     <form id="edit-entry-form" class="form" method="post" role="form">
                         {{ edit_entry_form.hidden_tag() }}
                         {{ wtf.form_errors(edit_entry_form, hiddens="only") }}
@@ -119,8 +125,14 @@
                         {{ wtf.form_field(edit_entry_form.pronunciation) }}
                         <br>
                     </form>
+                    <form id="edit-def-form" class="form" method="post" role="form">
+                        {{ edit_def_form.hidden_tag() }}
+                        {{ wtf.form_errors(edit_def_form, hiddens="only") }}
+                        {{ wtf.form_field(edit_def_form.POS) }}
+                        <br>
+                    </form>
                 </div>
-                <button type="button" onclick="addDef" class="btn btn-primary">Add a definition</button>
+                <button id="test" type="button" class="btn btn-primary edit-def">Add a definition</button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary">Save changes</button>
