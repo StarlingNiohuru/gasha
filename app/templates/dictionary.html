@@ -125,12 +125,8 @@
                         {{ wtf.form_field(edit_entry_form.pronunciation) }}
                         <br>
                     </form>
-                    <form id="edit-def-form" class="form" method="post" role="form">
-                        {{ edit_def_form.hidden_tag() }}
-                        {{ wtf.form_errors(edit_def_form, hiddens="only") }}
-                        {{ wtf.form_field(edit_def_form.POS) }}
-                        <br>
-                    </form>
+                    {% from "definition_form.html" import add_def %}
+                    {{ add_def(edit_def_form) }}
                 </div>
                 <button id="test" type="button" class="btn btn-primary edit-def">Add a definition</button>
             </div>

@@ -1,0 +1,17 @@
+{% import "bootstrap/wtf.html" as wtf %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+{% macro add_def(form) %}
+<form id="edit-def-form" class="form" method="post" role="form">
+    {{ form.hidden_tag() }}
+    {{ wtf.form_errors(form, hiddens="only") }}
+    {{ wtf.form_field(form.POS) }}
+    {{ wtf.form_field(form.definition_type) }}
+    <br>
+</form>
+{% endmacro %}
+</body>
+</html> 
