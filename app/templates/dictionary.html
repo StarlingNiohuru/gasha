@@ -8,7 +8,7 @@
             if (this.id == 'new')
                 {$("h2.modal-title").text("Create a new entry");
             $("input#entry_name").val("").removeAttr('readonly','readonly');
-            $("select#entry_type").val("");
+            $("select#edit_entry_type").val("");
             $("input#pronunciation").val("");}
             else
                 {var entryName = this.value;
@@ -20,7 +20,7 @@
                         success:function(data){
                             var json = JSON.parse(data);
                             $("input#entry_name").val(json.entry_name).attr('readonly','readonly');
-                            $("select#entry_type").val(json.entry_type);
+                            $("select#edit_entry_type").val(json.entry_type);
                             $("input#pronunciation").val(json.pronunciation);}
                         });
                 }
@@ -121,7 +121,7 @@
                         {{ edit_entry_form.hidden_tag() }}
                         {{ wtf.form_errors(edit_entry_form, hiddens="only") }}
                         {{ wtf.form_field(edit_entry_form.entry_name) }}
-                        {{ wtf.form_field(edit_entry_form.entry_type) }}
+                        {{ wtf.form_field(edit_entry_form.entry_type, id="edit_entry_type") }}
                         {{ wtf.form_field(edit_entry_form.pronunciation) }}
                         <br>
                     </form>
