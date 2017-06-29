@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
 </head>
 <body>
-{% macro add_def(form) %}
-<form id="edit-def-form" class="form" method="post" role="form">
+{% macro add_def(form,num) %}
+<h3 id="num-title",class="modal-title"></h3>
+<form id="{{ num }}" class="form" method="post" role="form">
     {{ form.hidden_tag() }}
     {{ wtf.form_errors(form, hiddens="only") }}
+    {{ wtf.form_field(form.label, readonly="readonly",id="{{ num }}") }}
     {{ wtf.form_field(form.POS) }}
     {{ wtf.form_field(form.definition_type) }}
-    <br>
+    <button type="button" class="btn btn-primary add-example">Add an example</button>
+    <button type="button" class="btn btn-primary del-def">Delete this definition</button>
 </form>
+<br>
 {% endmacro %}
 </body>
 </html> 

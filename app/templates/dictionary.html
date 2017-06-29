@@ -4,6 +4,7 @@
 {{ super() }}
 <script type="text/javascript">
     $(document).ready(function(){
+        var def_num = 0;
         $("button.edit-entry").click(function(){
             if (this.id == 'new')
                 {$("h2.modal-title").text("Create a new entry");
@@ -11,7 +12,8 @@
             $("select#edit_entry_type").val("");
             $("input#pronunciation").val("");}
             else
-                {var entryName = this.value;
+                {$("h2.modal-title").text("Edit an entry");
+                    var entryName = this.value;
                     $.ajax({type: "POST",
                         url:"{{ url_for('main.edit_entry') }}",
                         data:JSON.stringify({entry_name:entryName}),
@@ -26,10 +28,11 @@
                 }
             });
         $('button.edit-def').click(function(){
-            var container = document.getElementById("modal-form-container");
-            var form = document.createElement('form');form.setAttribute('class','form');form.method="post";form.setAttribute('role','form');
-            container.append(form);
-            form.insertAdjacentHTML( 'test', str );
+            def_num = def_num + 1;
+            var definition = {% from "definition_form.html" import add_def %}{{ add_def(edit_def_form, def_num)|tojson|safe }}
+            $("div#modal-form-container").append(definition);
+            $("h3#num-title").text("Definition No." + def_num);
+
         });
     });
 </script>
@@ -125,8 +128,6 @@
                         {{ wtf.form_field(edit_entry_form.pronunciation) }}
                         <br>
                     </form>
-                    {% from "definition_form.html" import add_def %}
-                    {{ add_def(edit_def_form) }}
                 </div>
                 <button id="test" type="button" class="btn btn-primary edit-def">Add a definition</button>
             </div>

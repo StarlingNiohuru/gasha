@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask_wtf import FlaskForm
-from wtforms import DateTimeField, SelectField, SubmitField, StringField, FormField, FieldList
+from wtforms import DateTimeField, SelectField, SubmitField, StringField, FormField, FieldList, IntegerField
 from config import ENTRY_TYPE_CHOICE
 from .models import DEFINITION_TYPE_CHOICE, Definition
 
@@ -14,8 +14,9 @@ class ShowEntriesForm(FlaskForm):
 
 
 class EditDefinitionForm(FlaskForm):
+    label = IntegerField("Label")
     POS = SelectField("POS", choices=Definition.POS_CHOICE)
-    definition_type = SelectField("Definition type", choices=DEFINITION_TYPE_CHOICE)
+    definition_type = SelectField("Definition type", choices=DEFINITION_TYPE_CHOICE, default=0)
     definition_in_self = StringField("Definition in self")
     definition_in_English = StringField("Definition in English")
     definition_in_Chinese = StringField("Definition in Chinese")
